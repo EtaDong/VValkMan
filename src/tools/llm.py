@@ -3,7 +3,7 @@ from .config import load_environment
 import os
 from google import genai
 from langchain_openai import ChatOpenAI
-from langchain_google_genai import ChatGoogleGenerativeAI, GenAIAqa
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 
 def init_deepseek_chat():

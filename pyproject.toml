@@ -6,17 +6,17 @@ requires-python = ">=3.12"
 
 dependencies = [
     "requests",
-    "python-dotenv",
+    "flask>=3.1.2",
     "langchain",
     "langchain-community",
     "langchain-openai",
-    "openai",
-    "flask>=3.1.2",
-    "google>=3.0.0",
     "langchain-google-genai>=2.1.12",
+    "openai",
+    "google>=3.0.0",
     "google-genai>=1.52.0",
     "pytest",
-    "pydantic>=2.11.7",
+    "python-dotenv",
+    "pydantic>=2.11.7",    
 ]
 
 [tool.pytest.ini_options]
