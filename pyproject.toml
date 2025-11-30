@@ -1,5 +1,5 @@
 [project]
-name = "open-demo"
+name = "vvalkman"
 version = "0.1.0"
 description = "Open Round chat model demo"
 requires-python = ">=3.12"
@@ -25,9 +25,6 @@ testpaths = ["src/test"]
 [[tool.uv.index]]
 url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 default = true 
-
-
-
 
 
 
