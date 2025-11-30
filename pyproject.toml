@@ -1,0 +1,33 @@
+[project]
+name = "open-demo"
+version = "0.1.0"
+description = "Open Round chat model demo"
+requires-python = ">=3.12"
+
+dependencies = [
+    "requests",
+    "python-dotenv",
+    "langchain",
+    "langchain-community",
+    "langchain-openai",
+    "openai",
+    "flask>=3.1.2",
+    "google>=3.0.0",
+    "langchain-google-genai>=2.1.12",
+    "google-genai>=1.52.0",
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["src/test"]
+
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true 
+
+
+
+
+
+
