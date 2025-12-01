@@ -6,7 +6,6 @@ requires-python = ">=3.12"
 
 dependencies = [
     "requests",
-    "flask>=3.1.2",
     "langchain",
     "langchain-community",
     "langchain-openai",
@@ -16,12 +15,14 @@ dependencies = [
     "google-genai>=1.52.0",
     "pytest",
     "python-dotenv",
-    "pydantic>=2.11.7",    
+    "pydantic>=2.11.7",
+    "fastapi",
+    "uvicorn",
 ]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
-testpaths = ["src/test"]
+testpaths = ["test"]
 
 [[tool.uv.index]]
 url = "https://pypi.tuna.tsinghua.edu.cn/simple"

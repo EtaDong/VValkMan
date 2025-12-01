@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vvalkman-api
+  labels:
+    app: vvalkman-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vvalkman-api
+  template:
+    metadata:
+      labels:
+        app: vvalkman-api
+    spec:
+      containers:
+        - name: vvalkman-api
+          image: vvalkman-api:latest
+          imagePullPolicy: IfNotPresent  # Important for local development
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vvalkman-service
+spec:
+  selector:
+    app: vvalkman-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: LoadBalancer  # Exposes it on localhost

@@ -116,3 +116,7 @@ venv.bak/
 # OS specific files
 .DS_Store
 Thumbs.db
+
+# local data
+local_data/
+deploy/go-deploy
