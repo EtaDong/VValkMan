@@ -120,3 +120,5 @@ Thumbs.db
 # local data
 local_data/
 deploy/go-deploy
+
+chroma_db

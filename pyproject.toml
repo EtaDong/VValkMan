@@ -18,6 +18,15 @@ dependencies = [
     "pydantic>=2.11.7",
     "fastapi",
     "uvicorn",
+    "chromadb",
+    "sentence-transformers",
+    "langchain-chroma",
+    "langchain-huggingface",
+    "huggingface-hub[cli]>=0.36.0",
+    "langgraph",
+    "pyspark",
+    "wikipedia",
+    "gitpython",
 ]
 
 [tool.pytest.ini_options]
