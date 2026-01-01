@@ -27,6 +27,11 @@ dependencies = [
     "pyspark",
     "wikipedia",
     "gitpython",
+    "sqlalchemy>=2.0.43",
+    "mcp>=1.25.0",
+    "asyncpg>=0.31.0",
+    "greenlet>=3.2.4",
+    "aiosqlite>=0.19.0",
 ]
 
 [tool.pytest.ini_options]
@@ -36,6 +41,11 @@ testpaths = ["test"]
 [[tool.uv.index]]
 url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 default = true 
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.10",
+]
 
 
 

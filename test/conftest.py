@@ -26,12 +26,10 @@ def deepseek_client():
 
     if not api_key or not base_url:
         pytest.fail(
-            "DEEPSEEK_API_KEY or DEEPSEEK_ENDPOINT environment variables not set.")
+            "DEEPSEEK_API_KEY or DEEPSEEK_ENDPOINT environment variables not set."
+        )
 
-    client = OpenAI(
-        api_key=api_key,
-        base_url=base_url
-    )
+    client = OpenAI(api_key=api_key, base_url=base_url)
     return client
 
 
@@ -46,8 +44,7 @@ def google_client():
     model = os.getenv("GOOGLE_MODEL")
 
     if not api_key or not model:
-        pytest.fail(
-            "GOOGLE_API_KEY or GOOGLE_MODEL environment variables not set.")
+        pytest.fail("GOOGLE_API_KEY or GOOGLE_MODEL environment variables not set.")
 
     client = ChatGoogleGenerativeAI(
         model=model,
