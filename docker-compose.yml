@@ -1,0 +1,32 @@
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: pgvector-container
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: vector_db
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - vvalk-network
+
+  adminer:
+    image: adminer
+    container_name: adminer-container
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - vvalk-network
+    depends_on:
+      - db
+
+networks:
+  vvalk-network:
+    driver: bridge
+
+volumes:
+  pgdata:

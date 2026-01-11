@@ -16,9 +16,11 @@ DATABASE_URL = "sqlite+aiosqlite:///./test.db"
 engine = create_async_engine(DATABASE_URL, echo=True)
 AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)
 
+
 # 定义数据库模型
 class Base(DeclarativeBase):
     pass
+
 
 class User(Base):
     __tablename__ = "users"
@@ -26,16 +28,19 @@ class User(Base):
     name: Mapped[str]
     role: Mapped[str]
 
+
 class Item(Base):
     __tablename__ = "items"
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     price: Mapped[float]
 
+
 # --- Pydantic Models ---
 class ItemCreate(BaseModel):
     name: str
     price: float
+
 
 class ItemResponse(ItemCreate):
     id: int
@@ -43,21 +48,24 @@ class ItemResponse(ItemCreate):
     class Config:
         from_attributes = True
 
+
 # --- FastAPI & MCP 配置 ---
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # Startup
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    
+
     yield
-    
+
     # Shutdown
     await engine.dispose()
+
 
 # --- FastAPI & MCP 配置 ---
 app = FastAPI(title="User Data MCP Server", lifespan=lifespan)
 mcp_server = FastMCP("user-manager")
+
 
 # --- 修改后的 MCP Tool ---
 @mcp_server.tool()
@@ -69,15 +77,17 @@ async def get_user_info(user_id: int) -> str:
     async with AsyncSessionLocal() as session:
         result = await session.execute(select(User).where(User.id == user_id))
         user = result.scalar_one_or_none()
-        
+
         if not user:
             return f"User with ID {user_id} not found."
-        
+
         user_info = {"name": user.name, "role": user.role}
         return str(user_info)
 
+
 # 挂载 MCP 路由
 app.mount("/mcp", mcp_server.streamable_http_app())
+
 
 # --- Items Endpoints ---
 @app.post("/items/", response_model=ItemResponse)
@@ -89,12 +99,14 @@ async def create_item(item: ItemCreate):
         await session.refresh(db_item)
         return db_item
 
+
 @app.get("/items/", response_model=List[ItemResponse])
 async def read_items(skip: int = 0, limit: int = 100):
     async with AsyncSessionLocal() as session:
         result = await session.execute(select(Item).offset(skip).limit(limit))
         items = result.scalars().all()
         return items
+
 
 @app.get("/items/{item_id}", response_model=ItemResponse)
 async def read_item(item_id: int):
@@ -105,6 +117,7 @@ async def read_item(item_id: int):
             raise HTTPException(status_code=404, detail="Item not found")
         return item
 
+
 # 可选：在启动时创建表（仅用于演示）
 # @app.on_event("startup")
 # async def startup():
@@ -114,4 +127,5 @@ async def read_item(item_id: int):
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -32,6 +32,10 @@ dependencies = [
     "asyncpg>=0.31.0",
     "greenlet>=3.2.4",
     "aiosqlite>=0.19.0",
+    "langchain-deepseek>=0.1.4",
+    "langchain-ollama>=0.3.10",
+    "langchain-postgres>=0.0.16",
+    "langchain-core>=0.3.76",
 ]
 
 [tool.pytest.ini_options]

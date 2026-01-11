@@ -1,7 +1,9 @@
 import threading
 
+
 def worker():
     print("worker thread")
+
 
 threads = []
 for i in range(5):
@@ -11,5 +13,3 @@ for i in range(5):
 
 for t in threads:
     t.join()
-
-
