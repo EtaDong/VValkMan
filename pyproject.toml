@@ -36,6 +36,8 @@ dependencies = [
     "langchain-ollama>=0.3.10",
     "langchain-postgres>=0.0.16",
     "langchain-core>=0.3.76",
+    "langfuse>=2.60.10,<3.0.0",
+    "mlx-lm>=0.29.1",
 ]
 
 [tool.pytest.ini_options]
@@ -48,6 +50,9 @@ default = true
 
 [dependency-groups]
 dev = [
+    "black>=25.12.0",
+    "ipykernel>=7.1.0",
+    "mypy>=1.19.1",
     "ruff>=0.14.10",
 ]
 

@@ -52,9 +52,27 @@ services:
       - db-vector
       - db-langfuse
 
+  # --- ClickHouse (分析型数据库，v3 必须) ---
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse-langfuse
+    user: "101:101" # 避免权限问题
+    environment:
+      - CLICKHOUSE_DB=langfuse
+      - CLICKHOUSE_USER=myuser
+      - CLICKHOUSE_PASSWORD=mypassword
+    volumes:
+      - ./clickhouse_data:/var/lib/clickhouse
+    networks: ["vvalk-network"]
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q localhost:8123/ping || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      
   # --- Langfuse 服务 ---
   langfuse-server:
-    image: langfuse/langfuse:2
+    image: langfuse/langfuse:latest
     depends_on:
       db-langfuse:
         condition: service_healthy
@@ -65,9 +83,9 @@ services:
       - NEXTAUTH_URL=http://localhost:3000
       - NEXTAUTH_SECRET=my_ultra_secure_nextauth_secret
       - SALT=my_ultra_secure_salt
-      - LANGFUSE_INIT_SKIP_MIGRATIONS=false
       # 指向专用的 db-langfuse
       - DATABASE_URL=postgresql://myuser:mypassword@db-langfuse:5432/langfuse_db
+      - CLICKHOUSE_URL=http://myuser:mypassword@clickhouse:8123/langfuse
       - TELEMETRY_ENABLED=false
     networks:
       - vvalk-network

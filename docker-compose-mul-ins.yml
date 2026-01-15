@@ -1,0 +1,55 @@
+services:
+  # --- 统一的数据库物理实例 ---
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: pgvector-shared-container
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin_user
+      POSTGRES_PASSWORD: admin_password
+      # 注意：这里的 POSTGRES_DB 只能指定一个默认库
+      POSTGRES_DB: postgres 
+    volumes:
+      - ./postgres_shared_data:/var/lib/postgresql/data
+      # 关键点：挂载初始化脚本来创建多个库
+      - ./init-db:/docker-entrypoint-initdb.d
+    networks:
+      - vvalk-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin_user -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer
+    container_name: adminer-container
+    ports:
+      - "8080:8080"
+    networks:
+      - vvalk-network
+    depends_on:
+      - db
+
+  langfuse-server:
+    image: langfuse/langfuse:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=my_ultra_secure_nextauth_secret
+      - SALT=my_ultra_secure_salt
+      # 连接到同一个 db 实例，但指定 langfuse_db 数据库
+      - DATABASE_URL=postgresql://admin_user:admin_password@db:5432/langfuse_db
+      - TELEMETRY_ENABLED=false
+    networks:
+      - vvalk-network
+
+networks:
+  vvalk-network:
+    driver: bridge

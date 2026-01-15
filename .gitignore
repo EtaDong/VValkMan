@@ -121,4 +121,8 @@ Thumbs.db
 local_data/
 deploy/go-deploy
 postgres_data
+postgres_biz_data
+postgres_lf_data
+clickhouse_data
 chroma_db
+.ruff_cache
