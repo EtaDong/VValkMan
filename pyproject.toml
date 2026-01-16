@@ -48,6 +48,11 @@ testpaths = ["test"]
 url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 default = true 
 
+[tool.uv.workspace]
+members = [
+    "cosmos-s1",
+]
+
 [dependency-groups]
 dev = [
     "black>=25.12.0",

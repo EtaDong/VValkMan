@@ -126,3 +126,4 @@ postgres_lf_data
 clickhouse_data
 chroma_db
 .ruff_cache
+cosmos-s1/backend/deploy/local-persist-data/

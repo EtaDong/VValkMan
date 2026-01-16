@@ -1,0 +1,93 @@
+services:
+  db-vector:
+    image: pgvector/pgvector:pg17
+    container_name: pg-vector-container
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: vector_db
+    volumes:
+      - ./pg-vector-data:/var/lib/postgresql/data
+    networks:
+      - cosmos-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d vector_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-business:
+    image: postgres:17
+    container_name: pg-business-container
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: business_db
+    volumes:
+      - ./pg-business-data:/var/lib/postgresql/data
+    networks:
+      - cosmos-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d business_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-langfuse:
+    image: postgres:17
+    container_name: pg-langfuse-container
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: langfuse_db
+    volumes:
+      - ./pg-langfuse-data:/var/lib/postgresql/data
+    networks:
+      - cosmos-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d langfuse_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer
+    container_name: adminer-container
+    ports:
+      - "8080:8080"
+    networks:
+      - cosmos-network
+    depends_on:
+      - db-vector
+      - db-business
+      - db-langfuse
+  
+  langfuse-server:
+    image: langfuse/langfuse:2
+    depends_on:
+      db-langfuse:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=my_ultra_secure_nextauth_secret
+      - SALT=my_ultra_secure_salt
+      - LANGFUSE_INIT_SKIP_MIGRATIONS=false
+      # 指向专用的 db-langfuse
+      - DATABASE_URL=postgresql://myuser:mypassword@db-langfuse:5432/langfuse_db
+      - TELEMETRY_ENABLED=false
+    networks:
+      - cosmos-network
+
+networks:
+  cosmos-network:
+    driver: bridge
+    
