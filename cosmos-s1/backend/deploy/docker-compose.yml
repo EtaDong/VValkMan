@@ -1,3 +1,5 @@
+name: vvalkman-ai-stack
+
 services:
   db-vector:
     image: pgvector/pgvector:pg17
@@ -9,7 +11,7 @@ services:
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: vector_db
     volumes:
-      - ./pg-vector-data:/var/lib/postgresql/data
+      - ./local-persist-data/pg-vector-data:/var/lib/postgresql/data
     networks:
       - cosmos-network
     healthcheck:
@@ -28,7 +30,7 @@ services:
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: business_db
     volumes:
-      - ./pg-business-data:/var/lib/postgresql/data
+      - ./local-persist-data/pg-business-data:/var/lib/postgresql/data
     networks:
       - cosmos-network
     healthcheck:
@@ -47,7 +49,7 @@ services:
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: langfuse_db
     volumes:
-      - ./pg-langfuse-data:/var/lib/postgresql/data
+      - ./local-persist-data/pg-langfuse-data:/var/lib/postgresql/data
     networks:
       - cosmos-network
     healthcheck:
